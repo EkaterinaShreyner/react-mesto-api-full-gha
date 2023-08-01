@@ -1,0 +1,14 @@
+.root {
+  background: #000;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1280px;
+  font-family: "Inter", sans-serif;
+  background-color: #000000;
+  color: #ffffff;
+  margin: auto;
+  position: relative;
+  z-index: 0;
+}

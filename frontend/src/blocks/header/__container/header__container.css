@@ -1,0 +1,11 @@
+.header__container {
+  display: flex;
+  min-width: 80px;
+  gap: 24px;
+}
+
+@media screen and (max-width: 470px) {
+  .header__container {
+    display: none;
+  }
+}

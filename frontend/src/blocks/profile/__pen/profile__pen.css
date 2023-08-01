@@ -1,0 +1,6 @@
+.profile__pen {
+   background-image: url('../../../image/VectorAvatar.svg');
+   background-repeat: no-repeat;
+   background-position: center;
+   z-index: 2;
+}

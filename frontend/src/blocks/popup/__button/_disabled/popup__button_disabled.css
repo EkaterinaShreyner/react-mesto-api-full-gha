@@ -1,0 +1,10 @@
+.popup__button_disabled {
+  /* backface-visibility: visible; */
+  background: #0000;
+  color: #c4c4c4;
+  border: 1px solid #c4c4c4;
+}
+
+.popup__button_disabled:hover {
+  opacity: 1;
+}

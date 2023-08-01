@@ -1,0 +1,21 @@
+.header__menu-burger {
+  display: none;
+  width: 24px;
+  height: 20px;
+  margin-right: 35px;
+  position: relative;
+  border: 0;
+  margin-right: 27px;
+  transition: opacity 0.3s linear;
+}
+
+.header__menu-burger:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 470px) {
+  .header__menu-burger {
+    display: flex;
+    align-items: center;
+  }
+}

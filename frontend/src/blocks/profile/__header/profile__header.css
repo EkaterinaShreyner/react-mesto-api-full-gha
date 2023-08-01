@@ -1,0 +1,18 @@
+.profile__header {
+  display: flex;
+  column-gap: 18px;
+  align-items: baseline;
+}
+
+@media screen and (max-width: 990px) {
+  .profile__header {
+    margin-top: 28px;
+  }
+}
+
+@media screen and (max-width: 645px) {
+  .profile__header {
+    column-gap: 10px;
+    padding-left: 28px;
+  }
+}
