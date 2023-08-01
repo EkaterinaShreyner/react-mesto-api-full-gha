@@ -108,9 +108,11 @@ class Api {
 // export default Api;
 
 const api = new Api({
-  url: 'https://nomoreparties.co/v1/cohort-65',
+  // url: 'https://nomoreparties.co/v1/cohort-65',
+  url: 'http://localhost:4000',
   headers: {
-    authorization: 'eb88a784-5abe-4513-8117-377adafa9ddc',
+    // authorization: 'eb88a784-5abe-4513-8117-377adafa9ddc',
+    authorization: `Bearer ${localStorage.getItem("token")}`,
     'Content-Type': 'application/json'
   }
 })

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 
 const auth = require('./middlewares/auth');
 const usersRouter = require('./routes/users');
@@ -11,8 +12,11 @@ const errorsHandler = require('./middlewares/errorsHandler');
 
 const NotFoundError = require('./errors/NotFoundError');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 4000 } = process.env;
 const app = express();
+
+// поддержка cors, разрешенные источники
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
