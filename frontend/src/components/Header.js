@@ -56,7 +56,7 @@ function Header(props) {
               >
                 {props.isMobileMenu 
                   ?
-                    <img src={close} className="header__button-close"/>
+                    <img src={close} className="header__button-close" alt="крестик"/>
                   : 
                   <>
                     <div className="header__menu-burger-item"></div>

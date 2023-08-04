@@ -22,14 +22,13 @@ function Login(props) {
 
   function onLogin(evt) {
     evt.preventDefault();
-    props.handleLogin();
     const {email, password} = formValue;
     mestoAuth.authorize(email, password)
       .then((res) => {
         localStorage.setItem("token", res.token);
         props.userEmail(email);
-        props.handleLogin();   
-        navigate("/");
+        props.handleLogin();  
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         console.error(`Ошибка авторизации: ${err}`)

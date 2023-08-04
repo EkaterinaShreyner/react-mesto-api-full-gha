@@ -45,21 +45,6 @@ function App() {
   // карточка для удаления
   const [selectedConfirmDeleteCard, setSelectedConfirmDeleteCard] = useState(null);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      Promise.all([api.getUserInfo(), api.getCards()])
-        .then(([dataUser, cards]) => {
-          setCurrentUser(dataUser);
-          setCards(cards);
-        })
-        .catch((err) => {
-          console.error(`Ошибка ${err}`);
-        });
-    }
-    
-  }, [isLoggedIn]);
-
-  const navigate = useNavigate();
 
   // запрос на проверку валидности токена
   function checkToken() {
@@ -68,14 +53,14 @@ function App() {
       mestoAuth.getContent(token)
       .then((res) => {
         if (res) {
-          setUserEmail(res.data.email) // получаем значение переменной состояния после сабмита
-          setIsLoggedIn(true);
-          navigate("/")
+          setUserEmail(res.email) // получаем значение переменной состояния после сабмита
+          setIsLoggedIn(true); // 
+          navigate("/", {replace: true}) // пользователь переходит на главную страницу
         }
         return;
       })
-      .catch((err) => {
-        console.error(`Ошибка валидности токена: ${err}`)
+      .catch(() => {
+        // console.error(`Ошибка валидности токена: ${err}`)
         setIsLoggedIn(false)
       })
     }
@@ -84,12 +69,39 @@ function App() {
   // срабатывает функция проверка токена единыжды при отрисовки компонента App
   useEffect(() => {
     checkToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Если токен еще не прошел проверку, при перезагрузке страницы отрисовыввется компонент Loading
-  // if (isLoggedIn === null) {
-  //   return <Loading />
-  // }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (isLoggedIn) {
+      // Promise.all([api.getUserInfo(), api.getCards()])
+      //   .then(([dataUser, cards]) => {
+      //     setCurrentUser(dataUser);
+      //     setCards(cards);
+      //   })
+      //   .catch((err) => {
+      //     console.error(`Ошибка ${err}`);
+      //   });
+      api.getUserInfo(token)
+        .then((dataUser) => {
+          setCurrentUser(dataUser);
+          setUserEmail(dataUser.email)
+        })
+        .catch((err) => {
+          console.error(`Ошибка ${err}`);
+        });
+      api.getCards(token)
+        .then((cards) => {
+          setCards(cards);
+        })
+        .catch((err) => {
+          console.error(`Ошибка ${err}`);
+        });
+    }   
+  }, [isLoggedIn]);
+
+  const navigate = useNavigate();
 
   function onSignOut() {
     localStorage.removeItem("token");
@@ -123,10 +135,11 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const token = localStorage.getItem("token");
+    const isLiked = card.likes.some(i => i === currentUser._id);
     
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, isLiked)
+    api.changeLikeCardStatus(card._id, isLiked, token)
       .then((newCard) => {
         setCards((cards) => cards.map((el) => el._id === card._id ? newCard : el))
       })
@@ -138,7 +151,8 @@ function App() {
   }
 
   function handleConfirmDeleteCard() {
-    api.deleteCard(selectedConfirmDeleteCard._id)
+    const token = localStorage.getItem("token");
+    api.deleteCard(selectedConfirmDeleteCard._id, token)
       .then(() => {
         const newCards = cards.filter((el) => el !== selectedConfirmDeleteCard)
         setCards(newCards)
@@ -153,8 +167,9 @@ function App() {
   }
 
   function handleUpdateUser(dataUser) {
+    const token = localStorage.getItem("token");
     setIsLoading(true)
-    api.patchUserInfo(dataUser) 
+    api.patchUserInfo(dataUser, token) 
       .then((dataUser) => {
         setCurrentUser({
           name: dataUser.name,
@@ -172,8 +187,9 @@ function App() {
   }
 
   function handleUpdateAvatar({avatar}) {
+    const token = localStorage.getItem("token");
     setIsLoading(true)
-    api.patchAvatar({avatar})
+    api.patchAvatar({avatar}, token)
       .then((dataUser) => {
         setCurrentUser({
           avatar: dataUser.avatar,
@@ -191,8 +207,9 @@ function App() {
   }
 
   function handleAddPlaceSubmit({name, link}) {
+    const token = localStorage.getItem("token");
     setIsLoading(true)
-    api.postNewCard({name, link})
+    api.postNewCard({name, link}, token)
       .then((newCard) => {
         setCards([newCard, ...cards])
         closeAllPopups();
@@ -231,7 +248,6 @@ function App() {
                 <Login
                   userEmail={(email) => setUserEmail(email)}
                   handleLogin={() => setIsLoggedIn(true)}
-                  
                 />
               }
             />
