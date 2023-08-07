@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const auth = require('./middlewares/auth');
 const usersRouter = require('./routes/users');
@@ -28,6 +29,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true })); // для приёма веб-страниц внутри POST-запроса
 
+// Логгер запросов нужно подключить до всех обработчиков роутов
+app.use(requestLogger);
 // запуск роутов регистрации и аутентификации
 // не требующие авторизации
 app.use('/', authorizationRouter);
@@ -44,6 +47,9 @@ app.use('/cards', cardsRouter);
 app.use('/*', (_req, _res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
+
+// логгер ошибок подключаем после обработчиков роутов и до обработчиков ошибок
+app.use(errorLogger);
 
 // обработчики ошибок celebrate
 app.use(errors());
