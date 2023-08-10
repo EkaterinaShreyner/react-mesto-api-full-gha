@@ -20,7 +20,7 @@ const app = express();
 
 // поддержка cors, разрешенные источники
 // app.use(cors({ origin: 'http://localhost:3000' }));
-app.use(cors({ origin: ['http://localhost:3001', 'http://mesto.project.nomoreparties.co', 'https://mesto.project.nomoreparties.co'] }));
+app.use(cors({ origin: ['http://localhost:3001', 'https://mesto.project.nomoreparties.co'] }));
 // app.use(cors({ origin: 'http://localhost:3001' }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
