@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -19,11 +20,18 @@ const app = express();
 
 // поддержка cors, разрешенные источники
 // app.use(cors({ origin: 'http://localhost:3000' }));
-app.use(cors({ origin: 'http://localhost:3001' }));
+app.use(cors({ origin: ['http://localhost:3001', 'http://mesto.project.nomoreparties.co', 'https://mesto.project.nomoreparties.co'] }));
+// app.use(cors({ origin: 'http://localhost:3001' }));
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
-});
+})
+  .then(() => {
+    console.log('БД подключена');
+  })
+  .catch((err) => {
+    console.error(`Ошибка при подключении к БД: ${err.massage}`);
+  });
 
 // объединение пакетов данных
 app.use(express.json());
