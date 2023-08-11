@@ -140,9 +140,9 @@ class Api {
 // export default Api;
 
 const api = new Api({
-  // url: 'https://nomoreparties.co/v1/cohort-65',
   // url: 'http://localhost:4000',
-  url: 'http://localhost:3000',
+  // url: 'http://localhost:3000',
+  url: 'https://api.mesto.project.nomoreparties.co',
   headers: {
     // authorization: 'eb88a784-5abe-4513-8117-377adafa9ddc',
     // authorization: `Bearer ${localStorage.getItem("token")}`,
