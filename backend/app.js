@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -16,14 +17,14 @@ const NotFoundError = require('./errors/NotFoundError');
 
 // const { PORT = 4000 } = process.env;
 const { PORT = 3000 } = process.env;
+const { MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const app = express();
 
 // поддержка cors, разрешенные источники
 // app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(cors({ origin: ['http://localhost:3001', 'https://mesto.project.nomoreparties.co'] }));
-// app.use(cors({ origin: 'http://localhost:3001' }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
 })
   .then(() => {
@@ -39,6 +40,13 @@ app.use(bodyParser.urlencoded({ extended: true })); // для приёма ве�
 
 // Логгер запросов нужно подключить до всех обработчиков роутов
 app.use(requestLogger);
+
+// краш-тест сервера
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 // запуск роутов регистрации и аутентификации
 // не требующие авторизации

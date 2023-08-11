@@ -8,6 +8,8 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 // создание нового пользователя
 function createUser(req, res, next) {
   const {
@@ -96,7 +98,8 @@ function login(req, res, next) {
       // создание токена
       const token = jwt.sign(
         { _id: user._id }, // зашифрованный в строку объект пользователя
-        'some-secret-key',
+        // 'some-secret-key',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' }, // действие токена 7 дней
       );
       console.log(token);
